@@ -19,7 +19,7 @@ public class GameEventsManager : Singleton<GameEventsManager>
     
     public event Action<int> EventExplosion;
     public event Action<int> EventEndFire;
-    
+    public event Action<int> EventMouseClick;
 
     public void _EventExplosion(int id){
         if(EventExplosion != null){
@@ -33,6 +33,11 @@ public class GameEventsManager : Singleton<GameEventsManager>
         }
     }
 
+    public void _EventMouseClick(int id){
+        if(EventMouseClick != null){
+            EventMouseClick(id);
+        }
+    }
 
 
 

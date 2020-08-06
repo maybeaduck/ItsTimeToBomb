@@ -12,19 +12,22 @@ public class BombController : MonoBehaviour, IPointerClickHandler//Клик ха
 
     [SerializeField] private int _CountTaps;
     [SerializeField] private int _RequiredTaps;
+    [SerializeField] private ParticleSystem _SmokeParticle;
     [SerializeField] private GameObject _Fire;
     [SerializeField] private GameObject _TargetFire;
     [SerializeField] private GameObject _FireOut;
 
     [HideInInspector] public bool _Explosion;
-
+    private Vector3 SmokePosition;
     private void OnEnable() {
         GameEventsManager.Instance.EventEndFire += OnDefuseBomb;
         GameEventsManager.Instance.EventExplosion += OnBombExplosion;
+        GameEventsManager.Instance.EventMouseClick += OnMouseParticle;
     }
     private void OnDisable() {
         GameEventsManager.Instance.EventEndFire -= OnDefuseBomb;
         GameEventsManager.Instance.EventExplosion -= OnBombExplosion;
+        GameEventsManager.Instance.EventMouseClick -= OnMouseParticle;
     }
 
     IEnumerator EndFire(){
@@ -36,9 +39,21 @@ public class BombController : MonoBehaviour, IPointerClickHandler//Клик ха
     public void OnPointerClick(PointerEventData eventData){ //Наследник класса, Чекает данные о мыхе
         if( eventData.pointerId == -1 && _OnFire && !_Explosion){//поинтерайди это кнопка -1 лкм, -2 пкм, -3 средняя
             _CountTaps++;
+            GameEventsManager.Instance._EventMouseClick(id);
         }
     }
     
+    public void OnMouseParticle(int id){
+        if(id == this.id){
+            Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hitInfo;
+            if (Physics.Raycast(myRay, out hitInfo, 100)){
+                ObjectPooler.Instance.SpawnFromePool("Smoke",hitInfo.point,new Quaternion(-180,-180,180,0));
+            }
+            
+        }
+    }
+
     private void Start()
     {  
         _OnFire = true;
