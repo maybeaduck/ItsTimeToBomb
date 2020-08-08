@@ -3,16 +3,15 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
-public class BombController : MonoBehaviour, IPointerClickHandler//Клик хандлер просто знает где мышка и обрабатывает все что  с ней связано
+public class BombController : MonoBehaviour
 {
     //Сделать эффект дыма при нажатии мышкой по огню 
     public int id;
     public Text info;
     public bool _OnFire;
-
+    
     [SerializeField] private int _CountTaps;
     [SerializeField] private int _RequiredTaps;
-    [SerializeField] private ParticleSystem _SmokeParticle;
     [SerializeField] private GameObject _Fire;
     [SerializeField] private GameObject _TargetFire;
     [SerializeField] private GameObject _FireOut;
@@ -36,15 +35,11 @@ public class BombController : MonoBehaviour, IPointerClickHandler//Клик ха
     }
 
     // Проверка нажатий на тригер
-    public void OnPointerClick(PointerEventData eventData){ //Наследник класса, Чекает данные о мыхе
-        if( eventData.pointerId == -1 && _OnFire && !_Explosion){//поинтерайди это кнопка -1 лкм, -2 пкм, -3 средняя
-            _CountTaps++;
-            GameEventsManager.Instance._EventMouseClick(id);
-        }
-    }
+
     
     public void OnMouseParticle(int id){
-        if(id == this.id){
+        if(id == this.id && _OnFire && !_Explosion){
+            _CountTaps++;
             Ray myRay = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;
             if (Physics.Raycast(myRay, out hitInfo, 100)){
@@ -70,7 +65,7 @@ public class BombController : MonoBehaviour, IPointerClickHandler//Клик ха
     }
     public void OnBombExplosion(int id){
         if (id == this.id){
-        info.text = "You LOSE";
+        info.text = "BOOM";
         _Explosion = true;
         }
     }
