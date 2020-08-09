@@ -7,6 +7,8 @@ public class Rotator : MonoBehaviour
 {
     [SerializeField] private float _RotationSpeed = 100; //скорость
     [SerializeField] private Slider SpeedRotation;
+    public bool StartRandomeRotation;
+    public bool AllowResetRotation;
     private bool dragging = false; //проверочная переменная
     private Rigidbody _rb; //переменная для физики
     
@@ -14,11 +16,15 @@ public class Rotator : MonoBehaviour
     public void Set_RotationSpeed(){
         _RotationSpeed = SpeedRotation.GetComponent<Slider>().value;
     }
+
     private void Start()
     {
+        
         _rb = GetComponent<Rigidbody>();//получаем физику
         //рандомный поворот при спавне объекта 
-        transform.rotation = new Quaternion(Random.Range(0,320),Random.Range(0,320),Random.Range(0,320),0);
+        if(StartRandomeRotation){
+            transform.rotation = new Quaternion(Random.Range(0,320),Random.Range(0,320),Random.Range(0,320),0);
+        }
     }
 
     private void OnMouseDrag() {//проверка мышки не тащит ли она чего
@@ -27,6 +33,9 @@ public class Rotator : MonoBehaviour
 
     private void Update()
     {
+        if(AllowResetRotation && Input.GetKeyDown(KeyCode.Space)){
+            gameObject.transform.rotation = Quaternion.identity;
+        }
         if (Input.GetMouseButtonUp (0)){//если вдруг отпустил мышь то ты точно не тащишь ничего за собой
             dragging = false;
         }

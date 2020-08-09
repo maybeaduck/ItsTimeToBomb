@@ -9,5 +9,7 @@ public class SmokeParticle : MonoBehaviour, IPooledObject
     {
         gameObject.GetComponent<ParticleSystem>().Play();
     }
-
+    private void OnDestroy() {
+        gameObject.SetActive(false);
+    }
 }

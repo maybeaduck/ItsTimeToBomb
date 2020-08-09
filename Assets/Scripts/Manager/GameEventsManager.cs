@@ -20,7 +20,19 @@ public class GameEventsManager : Singleton<GameEventsManager>
     public event Action<int> EventExplosion;
     public event Action<int> EventEndFire;
     public event Action<int> EventMouseClick;
+    public event Action<int,string> EventLevelLoader;
+    public event Action<int> EventExit;
 
+    public void _EventExit(int id){
+        if(EventExit != null){
+            EventExit(id);
+        }
+    }
+    public void _EventLevelLoader(int id,string SceneName){
+        if(EventLevelLoader != null){
+            EventLevelLoader(id,SceneName);
+        }
+    }
     public void _EventExplosion(int id){
         if(EventExplosion != null){
             EventExplosion(id);

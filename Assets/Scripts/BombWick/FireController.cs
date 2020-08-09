@@ -31,10 +31,13 @@ public class FireController : MonoBehaviour
         Debug.Log(1/TimeUntilTheEnd);
     }
     private void OnTriggerEnter(Collider other) {
-        _WickFirePercent = 0;
-        if(other.transform.tag == "Wick"){
-            Wick = other.gameObject;
+        if (other != null){
+            _WickFirePercent = 0;
+            if(other.transform.tag == "Wick"){
+                Wick = other.gameObject;
+            }
         }
+        
             
 
     }
@@ -59,7 +62,10 @@ public class FireController : MonoBehaviour
     private void FixedUpdate() {
         transform.position = Vector3.Lerp(transform.position, _TargetObject.transform.position,_TimerPersent * Time.fixedDeltaTime);
         //выше прото лерп который переносит группу парктикло до нужой точки - таргета
-        WickFire();
+        if(Wick != null){
+            WickFire();
+        }
+        
         
     }
 }
