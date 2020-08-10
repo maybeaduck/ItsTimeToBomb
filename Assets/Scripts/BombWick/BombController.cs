@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using UnityEngine.EventSystems;
 public class BombController : MonoBehaviour
 {
-    //Сделать эффект дыма при нажатии мышкой по огню 
     public int id;
     public Text info;
     public bool _OnFire;
