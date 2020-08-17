@@ -5,12 +5,19 @@ using UnityEngine.SceneManagement;
 public class MenuScript : MonoBehaviour
 {
     public int id;
+    public bool OnButtonDown = false;
+    [SerializeField] private GameObject _LoseObject;
+    private Vector3 delta;
     private void OnEnable() {
+        GameEventsManager.Instance.EventButtonDown += OnButtonEventTrigger;
+        GameEventsManager.Instance.EventGameOver += OnLoseMenu;
         GameEventsManager.Instance.EventLevelLoader += OnLoadLevel;
         GameEventsManager.Instance.EventExit += OnExit;
     }
     private void OnDisable() {
+        GameEventsManager.Instance.EventButtonDown -= OnButtonEventTrigger;
         GameEventsManager.Instance.EventLevelLoader -= OnLoadLevel;
+        GameEventsManager.Instance.EventGameOver -= OnLoseMenu;
         GameEventsManager.Instance.EventExit -= OnExit;
     }
     public void OnLoadLevel(int id,string levelname){
@@ -23,5 +30,51 @@ public class MenuScript : MonoBehaviour
         if(id == this.id){
         Application.Quit();
         }
+    }
+    private void OnLoseMenu(int id){
+        _LoseObject.SetActive(true);
+    }
+    private void OnButtonEventTrigger(int id,ButtonType BType,string levelname){
+        if(id == this.id){
+            switch (BType){
+
+                case ButtonType.LongADSButton:
+                if(OnButtonDown == false){
+                    OnButtonDown = true;
+                    StartCoroutine(LongADS());
+                } 
+                break;
+
+                case ButtonType.SwitchLevelButton:
+                if(OnButtonDown == false){
+                    OnButtonDown = true;
+                    StartCoroutine(LevelLoader(levelname));
+                }
+                break;
+
+                case ButtonType.ExitGameButton:
+                if(OnButtonDown == false){
+                    OnButtonDown = true;
+                    StartCoroutine(GameExit());
+                }  
+                break;
+            }
+        }
+    }
+
+    private IEnumerator LongADS(){
+        yield return new WaitForSeconds(0.3f);
+        Debug.Log("Продажное Сообщение");
+        OnButtonDown = false;
+    }
+    private IEnumerator LevelLoader(string _levelname){
+        yield return new WaitForSeconds(0.3f);
+        SceneManager.LoadScene(_levelname);
+        OnButtonDown = false;
+    }
+    private IEnumerator GameExit(){
+        yield return new WaitForSeconds(0.3f);
+        Application.Quit();
+        OnButtonDown = false;
     }
 }

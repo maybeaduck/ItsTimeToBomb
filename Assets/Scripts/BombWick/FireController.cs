@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 public class FireController : MonoBehaviour
 {
     //смена материала фителя когда он догорает
@@ -37,9 +39,6 @@ public class FireController : MonoBehaviour
                 Wick = other.gameObject;
             }
         }
-        
-            
-
     }
     void WickFire(){
 
@@ -56,6 +55,7 @@ public class FireController : MonoBehaviour
             if(_Timer.GetComponent<Timer>().GetTimerSeconds() >= TimeUntilTheEnd){
                 Debug.Log("EventExploution!");
                 GameEventsManager.Instance._EventExplosion(id);
+                
             }
         }
     }
@@ -64,8 +64,7 @@ public class FireController : MonoBehaviour
         //выше прото лерп который переносит группу парктикло до нужой точки - таргета
         if(Wick != null){
             WickFire();
-        }
-        
-        
+        }        
     }
+    
 }

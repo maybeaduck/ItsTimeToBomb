@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 public class BombController : MonoBehaviour
 {
     public int id;
@@ -31,8 +32,13 @@ public class BombController : MonoBehaviour
     IEnumerator EndFire(){
         yield return new WaitForSeconds(1.5f);//партиклы сменяются - огонь тухнет (Сделать скорость тушения быстрее)
         _Fire.SetActive(false); 
+        
     }
-
+    IEnumerator EndLevel(){
+        yield return new WaitForSeconds(6f);
+        GameEventsManager.Instance._EventLevelLoader(id,SceneManager.GetActiveScene().name);
+        
+    }
     // Проверка нажатий на тригер
 
     
@@ -56,16 +62,19 @@ public class BombController : MonoBehaviour
     
     public void OnDefuseBomb(int id){
         if (id == this.id){
-        info.text = "You WIN";
+        //info.text = "You WIN";
         _OnFire = false;
         _FireOut.SetActive(true);//еще немного партиклов
         StartCoroutine(EndFire());
+        StartCoroutine(EndLevel());
         }
     }
     public void OnBombExplosion(int id){
         if (id == this.id){
-        info.text = "BOOM";
-        _Explosion = true;
+            GameEventsManager.Instance._EventTakeDamage(id,1f);
+            
+            //info.text = "BOOM";
+            _Explosion = true;
         }
     }
 
