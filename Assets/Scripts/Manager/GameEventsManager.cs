@@ -10,7 +10,9 @@ public enum ButtonType{
     ShortADSButton,
     BanerADSButton,
     SwitchLevelButton,
-    ExitGameButton
+    ExitGameButton,
+    RestartThisParty,
+    PauseButton
 }
 
 public class GameEventsManager : Singleton<GameEventsManager>
@@ -26,7 +28,7 @@ public class GameEventsManager : Singleton<GameEventsManager>
         }
     }
     */
-    public event Action<int,ButtonType,string> EventButtonDown;
+    public event Action<int,ButtonType,string,bool> EventButtonDown;
     public event Action<int> EventExplosion;
     public event Action<int> EventEndFire;
     public event Action<int> EventMouseClick;
@@ -35,7 +37,19 @@ public class GameEventsManager : Singleton<GameEventsManager>
     public event Action<int> EventLoseMenu;
     public event Action<int,float> EventTakeDamage;
     public event Action<int> EventGameOver;
+    public event Action<int> EventExitTheParty;
+    public event Action<int,bool> EventPause;
 
+    public void _EventPause(int id,bool pause){
+        if(EventPause != null){
+            EventPause(id,pause);
+        }
+    }
+    public void _EventExitTheParty(int id){
+        if(EventExitTheParty != null){
+            EventExitTheParty(id);
+        }
+    }
     public void _EventGameOver(int id){
         if(EventGameOver != null){
             EventGameOver(id);
@@ -51,9 +65,9 @@ public class GameEventsManager : Singleton<GameEventsManager>
             EventLoseMenu(id);
         }
     }
-    public void _EventButtonDown(int id,ButtonType Btype,string levelName){
+    public void _EventButtonDown(int id,ButtonType Btype,string levelName,bool pause){
         if(EventButtonDown != null){
-            EventButtonDown(id,Btype,levelName);
+            EventButtonDown(id,Btype,levelName,pause);
         }
     }
     public void _EventExit(int id){

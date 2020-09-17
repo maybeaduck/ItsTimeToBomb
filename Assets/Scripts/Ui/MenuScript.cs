@@ -34,7 +34,7 @@ public class MenuScript : MonoBehaviour
     private void OnLoseMenu(int id){
         _LoseObject.SetActive(true);
     }
-    private void OnButtonEventTrigger(int id,ButtonType BType,string levelname){
+    private void OnButtonEventTrigger(int id,ButtonType BType,string levelname,bool pause){
         if(id == this.id){
             switch (BType){
 
@@ -55,13 +55,33 @@ public class MenuScript : MonoBehaviour
                 case ButtonType.ExitGameButton:
                 if(OnButtonDown == false){
                     OnButtonDown = true;
+                    GameEventsManager.Instance._EventExitTheParty(id);
                     StartCoroutine(GameExit());
                 }  
+                break;
+                case ButtonType.RestartThisParty:
+                    OnButtonDown = true;
+                    GameEventsManager.Instance._EventExitTheParty(id);
+                    StartCoroutine(LevelLoader(levelname));
+                break;
+                case ButtonType.PauseButton:
+                    OnButtonDown = true;
+                    StartCoroutine(PauseButton(pause));
                 break;
             }
         }
     }
-
+    private IEnumerator PauseButton(bool pause){
+        yield return new WaitForSeconds(0.3f);
+        if(pause == true){
+            Time.timeScale = 0;
+        }
+        else{
+            Time.timeScale = 1;
+        }
+        
+        GameEventsManager.Instance._EventPause(id,pause);
+    }
     private IEnumerator LongADS(){
         yield return new WaitForSeconds(0.3f);
         Debug.Log("Продажное Сообщение");

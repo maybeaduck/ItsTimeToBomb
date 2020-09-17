@@ -27,11 +27,11 @@ public class HpController : MonoBehaviour
     */
     public int id;
     public float hp1 = 1;
-    public float hp2 = 1;
-    public float hp3 = 1;
+    public float hp2 = 0;
+    public float hp3 = 0;
     public float hpG = 0;
     
-    [SerializeField] private GameObject HpInterface;
+    
 
     private void OnEnable() {
         GameEventsManager.Instance.EventTakeDamage += takedamage;
@@ -43,25 +43,25 @@ public class HpController : MonoBehaviour
         if(id == this.id){
         if(hpG > 0){
             hpG -= amountdamage;
-            updateicon(hpG,HpInterface.transform.GetChild(3).gameObject);
+            //updateicon(hpG, gameObject.transform.GetChild(3).gameObject);
             _setData();
             return;
         }
         if(hp3 > 0){
             hp3 -= amountdamage;
-            updateicon(hp3,HpInterface.transform.GetChild(2).gameObject);
+            //updateicon(hp3,gameObject.transform.GetChild(2).gameObject);
             _setData();
             return;
         }
         if(hp2 > 0){
             hp2 -= amountdamage;
-            updateicon(hp2,HpInterface.transform.GetChild(1).gameObject);
+            //updateicon(hp2,gameObject.transform.GetChild(1).gameObject);
             _setData();
             return;
         }
         if(hp1 > 0){
             hp1 -= amountdamage;
-            updateicon(hp1,HpInterface.transform.GetChild(0).gameObject);
+            //updateicon(hp1,gameObject.transform.GetChild(0).gameObject);
             _setData();
             return;
         }
@@ -73,12 +73,12 @@ public class HpController : MonoBehaviour
             hpconteiner.transform.GetChild(1).gameObject.SetActive(false);
             hpconteiner.transform.GetChild(0).gameObject.SetActive(false);
         }
-        if(hpcount<=0.5 && hpcount != 0){
+        if(hpcount<= 0.5 && hpcount != 0){
             hpconteiner.transform.GetChild(2).gameObject.SetActive(false);
             hpconteiner.transform.GetChild(1).gameObject.SetActive(true);
             hpconteiner.transform.GetChild(0).gameObject.SetActive(false);
         }
-        if(hpcount<= 0){
+        if(hpcount <= 0){
             hpconteiner.transform.GetChild(2).gameObject.SetActive(false);
             hpconteiner.transform.GetChild(1).gameObject.SetActive(false);
             hpconteiner.transform.GetChild(0).gameObject.SetActive(true);
@@ -91,19 +91,28 @@ public class HpController : MonoBehaviour
         GameController.Instance._setHpData(hp1,hp2,hp3,hpG);
     }
     public void _getData(){
-        GameController.Instance._getHpData(hp1,hp2,hp3,hpG);
+        float[] hp = new float[4]{0,0,0,0};
+        
+        hp = GameController.Instance._getHpData();
+        hp1 = hp[0];
+        hp2 = hp[1];
+        hp3 = hp[2];
+        hpG = hp[3];
+        
         updateHp();
     }
-    public void updateHp(){
-        updateicon(hp1,HpInterface.transform.GetChild(0).gameObject);
-        updateicon(hp1,HpInterface.transform.GetChild(1).gameObject);
-        updateicon(hp1,HpInterface.transform.GetChild(2).gameObject);
-        updateicon(hp1,HpInterface.transform.GetChild(3).gameObject);
+    public void updateHp(){/*
+        updateicon(hp1,gameObject.transform.GetChild(0).gameObject);
+        updateicon(hp2,gameObject.transform.GetChild(1).gameObject);
+        updateicon(hp3,gameObject.transform.GetChild(2).gameObject);
+        updateicon(hpG,gameObject.transform.GetChild(3).gameObject);
+        */
     }
     private void Start() {
         _getData();
     }
     private void Update() {
+        
         if(hp1 == 0 && hp2 == 0 && hp3 == 0 && hpG == 0){
             GameEventsManager.Instance._EventGameOver(id);
         }

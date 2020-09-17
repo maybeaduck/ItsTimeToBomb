@@ -81,7 +81,10 @@ public class BombController : MonoBehaviour
     private void Update()
     {
         if(_CountTaps == _RequiredTaps){
-            GameEventsManager.Instance._EventEndFire(id);
+            if(_OnFire != false){
+                GameEventsManager.Instance._EventEndFire(id);
+            }
+            
         }
     }
     

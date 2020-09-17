@@ -32,7 +32,9 @@ public class ExplosionController : MonoBehaviour
         yield return new WaitForSeconds(3.0f);
         _shardObject.SetActive(false);
         yield return new WaitForSeconds(2.0f);
-        GameEventsManager.Instance._EventLevelLoader(id,SceneManager.GetActiveScene().name);
+        if(GameController.Instance._OnGameOver == false){
+            GameEventsManager.Instance._EventLevelLoader(id,SceneManager.GetActiveScene().name);
+        }
     }
     
         
